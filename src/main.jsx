@@ -3,6 +3,15 @@ import { createRoot } from 'react-dom/client';
 import './styles.css';
 
 const image = (number) => `/tutorial-images/step-${String(number).padStart(2, '0')}.png`;
+const imageSize = {
+  1: [1267, 63], 2: [1184, 425], 3: [1377, 1224], 4: [1251, 658], 5: [708, 412],
+  6: [1181, 450], 7: [702, 234], 8: [764, 275], 9: [1268, 583], 10: [574, 277],
+  11: [770, 337], 12: [1093, 905], 13: [899, 258], 14: [760, 838], 15: [755, 640],
+  16: [1718, 960], 17: [803, 569], 18: [836, 539], 19: [733, 827], 20: [783, 780],
+  21: [636, 138], 22: [747, 562], 23: [696, 541], 24: [662, 589], 25: [748, 570],
+  26: [1268, 671], 27: [366, 288], 28: [1269, 758], 29: [486, 692], 30: [265, 340],
+  31: [958, 335], 32: [661, 346], 33: [308, 240], 34: [508, 209], 35: [829, 76]
+};
 
 const sections = [
   {
@@ -70,9 +79,9 @@ const sections = [
     id: 'draft', title: '混选跳点', items: [
       { title: '赛管设置', lines: ['填写完所有队伍名称之后（参见创建新对局下的填写队伍名）', '点击DROPS下的CONFIGURE，DROP TYPE点击DRAFT，', '地图选择带有ALGS的标签的。', 'Team Choose Timer：每队每轮选点的倒计时长度，建议为120秒。', 'Draft Ordering Mode：', 'Normal：会按照你在LOBBY中设置的队伍顺序为顺位开始选点', 'Sanke：蛇形选点，第一张图第一个选位的队伍在下一张是倒数第一个选点', '3 Map Balanced：没试过，不知道', 'Auto Assign：在选点全部结束后，给超时未选的队伍自动分配到尚未被选择的点位。', '中间的Draft Start Time是选点开始时间（不推荐，建议直接手动开始）'], images: [29] },
       { title: '开始选点前队伍状态', lines: ['赛管可以在左侧看出队伍是否被认领，观察是否符合开始选点的状态。', '亮起绿灯即说明该队伍已经准备好选点（已被认领）。'], images: [30] },
-      { title: '选点开始', lines: ['填写完密码（参考创建比赛地图池最后填写的密码）后，将选点网址发给队长。', '设置完成后，赛管点击START NOW即可开始混选。'], images: [31] },
-      { title: '队伍选点', lines: ['选择JOIN DRAFT，并输入赛管给的密码，认领自己的队伍，等待选点开始。', '选点时可以任选一张的任意一个点，直接点击图中的点位即可。'], images: [32] },
-      { lines: ['（注意，此网站的选点模式中，多个队选同一个点是被允许的，如果比赛规则不需要roll点，需要在选点前提前告知各个队伍）'], images: [33, 34] }
+      { title: '选点开始', lines: ['填写完密码（参考创建比赛地图池最后填写的密码）后，将选点网址发给队长。', '设置完成后，赛管点击START NOW即可开始混选。'], images: [31,32] },
+      { title: '队伍选点', lines: ['选择JOIN DRAFT，并输入赛管给的密码，认领自己的队伍，等待选点开始。', '选点时可以任选一张的任意一个点，直接点击图中的点位即可。'], images: [33] },
+      { lines: ['（注意，此网站的选点模式中，多个队选同一个点是被允许的，如果比赛规则不需要roll点，需要在选点前提前告知各个队伍）'], images: [34] }
     ]
   },
   {
@@ -81,7 +90,7 @@ const sections = [
       { title: '1.房间码可用开始时间' },
       { title: '2.房间码可用开始时间' },
       { title: '3.房间码对应的Stats Codes' },
-      { title: '4.管理员码' ,lines: ['赛管进入房间用，进入后会有一个皇冠标识','只有赛管才可以对房间进行任何设置','不应该被泄露给无关人员']},
+      { title: '4.管理员码' ,lines: ['赛管进入房间用，进入后会有一个皇冠标识','只有赛管才可以对房间进行任何设置','不应该泄露给无关人员']},
       { title: '5.选手码' ,lines: ['发给选手进入房间用']},
 
     ]
@@ -110,6 +119,49 @@ const withHeadingLevels = (items) => {
   });
 };
 
+function TutorialImage({ number, onOpen }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [width, height] = imageSize[number];
+
+  return (
+    <button
+      type="button"
+      className={`image-card${isLoaded ? ' is-loaded' : ''}`}
+      style={{ '--image-ratio': `${width} / ${height}` }}
+      onClick={() => onOpen(number)}
+      aria-busy={!isLoaded}
+    >
+      {!isLoaded && <span className="image-skeleton" aria-hidden="true" />}
+      <img src={image(number)} width={width} height={height} alt="" loading="lazy" onLoad={() => setIsLoaded(true)} />
+    </button>
+  );
+}
+
+function ArticleSkeleton() {
+  return (
+    <article className="content article-skeleton" aria-hidden="true">
+      <div className="skeleton-block skeleton-title" />
+      <div className="skeleton-row">
+        <div className="skeleton-copy">
+          <div className="skeleton-block skeleton-heading" />
+          <div className="skeleton-block skeleton-line skeleton-line--full" />
+          <div className="skeleton-block skeleton-line skeleton-line--wide" />
+          <div className="skeleton-block skeleton-line skeleton-line--medium" />
+        </div>
+        <div className="skeleton-block skeleton-image" />
+      </div>
+      <div className="skeleton-row skeleton-row--secondary">
+        <div className="skeleton-copy">
+          <div className="skeleton-block skeleton-heading skeleton-heading--small" />
+          <div className="skeleton-block skeleton-line skeleton-line--wide" />
+          <div className="skeleton-block skeleton-line skeleton-line--short" />
+        </div>
+        <div className="skeleton-block skeleton-image skeleton-image--small" />
+      </div>
+    </article>
+  );
+}
+
 function TutorialItem({ item, index, sectionId, onImageOpen }) {
   const HeadingTag = item.headingLevel === 3 ? 'h3' : 'h2';
 
@@ -118,7 +170,7 @@ function TutorialItem({ item, index, sectionId, onImageOpen }) {
       {item.title && <HeadingTag className={`item-heading item-heading--level-${item.headingLevel}`}>{item.title}</HeadingTag>}
       {item.lines?.length > 0 && <div className="item-text">{item.lines.map((line, lineIndex) => <p key={`${line}-${lineIndex}`}>{line}</p>)}</div>}
       {item.images?.length > 0 && <div className={`image-grid images-${Math.min(item.images.length, 3)}`}>
-        {item.images.map((number) => <button type="button" className="image-card" key={number} onClick={() => onImageOpen(number)}><img src={image(number)} alt="" loading="lazy" /></button>)}
+        {item.images.map((number) => <TutorialImage number={number} key={number} onOpen={onImageOpen} />)}
       </div>}
     </section>
   );
@@ -130,6 +182,7 @@ function App() {
   const [expandedId, setExpandedId] = useState(sections[0].id);
   const [query, setQuery] = useState('');
   const [lightbox, setLightbox] = useState(null);
+  const [isPageReady, setIsPageReady] = useState(false);
   const normalizedQuery = normalizeSearchText(query);
   const isSearching = normalizedQuery.length > 0;
   const activeSection = sections.find((section) => section.id === activeId) ?? sections[0];
@@ -143,6 +196,11 @@ function App() {
     }, [])
     : [];
   const visibleSections = isSearching ? searchResults.map(({ section }) => section) : sections;
+
+  useEffect(() => {
+    const frameId = requestAnimationFrame(() => setIsPageReady(true));
+    return () => cancelAnimationFrame(frameId);
+  }, []);
 
   useEffect(() => {
     if (isSearching) {
@@ -250,7 +308,7 @@ function App() {
         </nav>
       </aside>
       <main>
-        {isSearching ? (
+        {!isPageReady ? <ArticleSkeleton /> : isSearching ? (
           <article className="content search-results" key={normalizedQuery}>
             <h1>搜索结果</h1>
             {searchResults.length > 0 ? (

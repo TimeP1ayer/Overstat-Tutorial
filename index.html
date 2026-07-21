@@ -5,10 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#313338" />
     <meta name="description" content="Overstat 赛事管理教学中心" />
-    <title>Overstat 教学中心</title>
+    <title>Overstat使用手册 - TimeP1ayer</title>
+    <style>
+      @keyframes boot-skeleton-sweep { from { background-position: 160% 0; } to { background-position: -60% 0; } }
+      .boot-skeleton { min-height: 100vh; display: grid; grid-template-columns: 303px minmax(0, 1fr); color: #f2f3f5; background: #050714; font-family: Arial, "Microsoft YaHei UI", sans-serif; }
+      .boot-skeleton__side { padding: 44px 24px; background: #050714; }
+      .boot-skeleton__main { padding: 112px 64px; }
+      .boot-skeleton__block { display: block; border-radius: 8px; background: linear-gradient(90deg, #20243a 0%, #2d334d 48%, #20243a 100%); background-size: 220% 100%; animation: boot-skeleton-sweep 1.6s ease-in-out infinite; }
+      .boot-skeleton__search { height: 44px; margin-bottom: 28px; border-radius: 12px; }
+      .boot-skeleton__nav { height: 30px; margin: 12px 0; }
+      .boot-skeleton__title { width: min(630px, 74%); height: 72px; }
+      .boot-skeleton__row { display: grid; grid-template-columns: minmax(220px, .82fr) minmax(360px, 1.18fr); gap: 54px; margin-top: 54px; }
+      .boot-skeleton__line { height: 15px; margin-bottom: 13px; }
+      .boot-skeleton__image { min-height: 240px; border-radius: 15px; }
+      @media (max-width: 720px) { .boot-skeleton { display: block; } .boot-skeleton__side { padding: 76px 18px 18px; } .boot-skeleton__main { padding: 46px 20px; } .boot-skeleton__row { display: block; margin-top: 38px; } .boot-skeleton__image { margin-top: 24px; min-height: 180px; } }
+      @media (prefers-reduced-motion: reduce) { .boot-skeleton__block { animation: none; } }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-skeleton" aria-hidden="true">
+        <aside class="boot-skeleton__side">
+          <span class="boot-skeleton__block boot-skeleton__search"></span>
+          <span class="boot-skeleton__block boot-skeleton__nav"></span>
+          <span class="boot-skeleton__block boot-skeleton__nav"></span>
+          <span class="boot-skeleton__block boot-skeleton__nav"></span>
+          <span class="boot-skeleton__block boot-skeleton__nav"></span>
+        </aside>
+        <main class="boot-skeleton__main">
+          <span class="boot-skeleton__block boot-skeleton__title"></span>
+          <div class="boot-skeleton__row">
+            <div>
+              <span class="boot-skeleton__block boot-skeleton__line"></span>
+              <span class="boot-skeleton__block boot-skeleton__line" style="width:84%"></span>
+              <span class="boot-skeleton__block boot-skeleton__line" style="width:62%"></span>
+            </div>
+            <span class="boot-skeleton__block boot-skeleton__image"></span>
+          </div>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
