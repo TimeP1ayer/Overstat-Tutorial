@@ -1,0 +1,6 @@
+node_modules/
+dist/
+_docx_preview/
+qa-implementation-*.png
+vite.stdout.log
+vite.stderr.log
