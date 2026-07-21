@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './styles.css';
 
 const image = (number) => `/tutorial-images/step-${String(number).padStart(2, '0')}.png`;
+const lastUpdated = '2026-07-22';
 const imageSize = {
   1: [1267, 63], 2: [1184, 425], 3: [1377, 1224], 4: [1251, 658], 5: [708, 412],
   6: [1181, 450], 7: [702, 234], 8: [764, 275], 9: [1268, 583], 10: [574, 277],
@@ -183,6 +184,7 @@ function App() {
   const [query, setQuery] = useState('');
   const [lightbox, setLightbox] = useState(null);
   const [isPageReady, setIsPageReady] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const normalizedQuery = normalizeSearchText(query);
   const isSearching = normalizedQuery.length > 0;
   const activeSection = sections.find((section) => section.id === activeId) ?? sections[0];
@@ -201,6 +203,23 @@ function App() {
     const frameId = requestAnimationFrame(() => setIsPageReady(true));
     return () => cancelAnimationFrame(frameId);
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     if (isSearching) {
@@ -247,6 +266,7 @@ function App() {
     setActiveId(id);
     setActiveItemIndex(null);
     setExpandedId(id);
+    setIsMenuOpen(false);
     if (clearSearch) setQuery('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -256,15 +276,27 @@ function App() {
     setActiveItemIndex(itemIndex);
     setQuery('');
     setExpandedId(sectionId);
+    setIsMenuOpen(false);
     requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById(`${sectionId}-item-${itemIndex}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })));
   };
 
   return (
     <div className="app-shell">
       <header className="site-header">
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          aria-label={isMenuOpen ? '关闭目录' : '打开目录'}
+          aria-controls="chapter-navigation"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span /><span /><span />
+        </button>
         <span>TimeP1ayer</span>
       </header>
-      <aside className="sidebar">
+      {isMenuOpen && <button type="button" className="menu-backdrop" aria-label="关闭目录" onClick={() => setIsMenuOpen(false)} />}
+      <aside className={`sidebar${isMenuOpen ? ' mobile-open' : ''}`}>
         <input
           className="chapter-search"
           value={query}
@@ -277,7 +309,7 @@ function App() {
           autoComplete="off"
           spellCheck="false"
         />
-        <nav aria-label="章节">
+        <nav id="chapter-navigation" aria-label="章节">
           {visibleSections.map((section) => {
             const sectionMatches = section.title.toLocaleLowerCase().includes(normalizedQuery);
             const subItems = withHeadingLevels(section.items)
@@ -332,6 +364,7 @@ function App() {
             </div>
           </article>
         )}
+        {isPageReady && <footer className="last-updated">最后更新时间：{lastUpdated}</footer>}
       </main>
       {lightbox && <div className="lightbox" role="presentation" onClick={() => setLightbox(null)}><img src={image(lightbox)} alt="" onClick={(event) => event.stopPropagation()} /></div>}
     </div>

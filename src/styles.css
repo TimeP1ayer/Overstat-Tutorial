@@ -49,6 +49,9 @@ button { cursor: pointer; }
   letter-spacing: -.02em;
 }
 
+.mobile-menu-toggle,
+.menu-backdrop { display: none; }
+
 .sidebar {
   position: fixed;
   z-index: 12;
@@ -158,6 +161,16 @@ main {
   margin: 0 auto;
   padding: 112px 64px 88px;
   animation: content-in .28s ease both;
+}
+
+.last-updated {
+  width: min(100%, 1120px);
+  margin: -42px auto 0;
+  padding: 0 64px 64px;
+  color: rgba(224, 227, 255, .62);
+  text-align: right;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 @keyframes content-in {
@@ -356,18 +369,56 @@ h1 {
   .app-shell { display: block; }
   .site-header {
     left: 0;
+    z-index: 30;
     height: 60px;
     padding: 0 18px;
+    justify-content: space-between;
+    color: #ffffff;
+    background: #2b3e86;
+    pointer-events: auto;
   }
-  .site-header span { font-size: 16px; }
+  .site-header span { color: #ffffff; font-size: 16px; }
+  .mobile-menu-toggle {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    pointer-events: auto;
+  }
+  .mobile-menu-toggle:hover,
+  .mobile-menu-toggle:focus-visible { background: rgba(255, 255, 255, .12); }
+  .mobile-menu-toggle:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+  .mobile-menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: #ffffff;
+  }
+  .menu-backdrop {
+    position: fixed;
+    z-index: 20;
+    inset: 60px 0 0;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: rgba(3, 5, 19, .46);
+  }
   .sidebar {
-    position: relative;
-    inset: auto;
-    width: auto;
-    padding: 76px 18px 18px;
-    overflow: visible;
-    background: rgba(3, 5, 19, .7);
+    position: fixed;
+    z-index: 25;
+    inset: 60px auto 0 0;
+    width: min(86vw, 320px);
+    padding: 22px 18px 30px;
+    overflow-y: auto;
+    background: #1f3273;
+    transform: translateX(-105%);
+    transition: transform .2s ease;
   }
+  .sidebar.mobile-open { transform: translateX(0); }
   .chapter-search { height: 42px; margin-bottom: 14px; }
   .sidebar nav {
     display: grid;
@@ -388,7 +439,12 @@ h1 {
   .subnav { margin-left: 14px; }
   .sidebar nav button.subnav-item { min-height: 30px; padding: 6px 8px; }
   main { grid-column: auto; }
-  .content { padding: 46px 20px 64px; }
+  .content { padding: 96px 20px 64px; }
+  .last-updated {
+    margin-top: -30px;
+    padding: 0 20px 40px;
+    font-size: 13px;
+  }
   h1 { font-size: clamp(38px, 12vw, 54px); line-height: 1.08; }
   .item-list { padding-top: 34px; }
   .result-list { padding-top: 34px; }
